@@ -17,9 +17,15 @@ class Series extends Component{
             isLoading: false,
             series: []
         }
+        this.renderSeries = this.renderSeries.bind(this)
+        this.loadData = this.loadData.bind(this)
     }
 
     componentDidMount(){
+        this.loadData()
+    }
+
+    loadData(){
         this.setState({isLoading: true})
         api.loadSeriesByGenre(this.props.match.params.genre).then((res) => {
             this.setState({
@@ -27,6 +33,10 @@ class Series extends Component{
                 series: res.data
             })
         })
+    }
+
+    deleteSeries(id){
+        api.deleteSeries(id).then((res) => this.loadData())
     }
 
     renderSeries(series){
@@ -42,7 +52,8 @@ class Series extends Component{
                         <p className="lead">{series.genre} / {statuses[series.status]}</p>
                         </div>
                         <div className="col-xs-12 col-md-6">
-                        <a className="btn btn-success" href="">Gerenciar</a>
+                        <a className="btn btn-success" href="">Editar</a>
+                        <a className="btn btn-success" onClick={() => this.deleteSeries(series.id)} >Excluir</a>
                         </div>
                     </div>
                     </div>
@@ -54,6 +65,13 @@ class Series extends Component{
     render(){
         return (<section id="intro" className="intro-section">
                     <h1>Séries {this.props.match.params.genre}</h1>
+                    {this.state.isLoading &&
+                        <p>Carregando . . . </p>
+                    }
+                    {
+                        !this.state.isLoading && this.state.series.length === 0 &&
+                        <div className='alert alert-info'>Nenhuma série cadstrada</div>
+                    }
 
                     <div id="series" className="row list-group">
                         { !this.state.isLoading &&
