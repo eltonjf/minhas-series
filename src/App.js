@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Home from './Home'
 import Series from './Series'
+import EditSeries from './EditSeries'
 
 import{
   BrowserRouter as Router,
@@ -45,8 +46,9 @@ class App extends Component {
             </div>
           </nav>
           <Route exact path='/' component={Home} />
-          <Route exact path='/about' component={About} />
+          <Route path='/series-edit/:id' component={EditSeries} />
           <Route path='/series/:genre' component={Series} />
+          <Route exact path='/about' component={About} />
           <Route exact path='/new' component={NewSeries} />
         </div>
       </Router>
